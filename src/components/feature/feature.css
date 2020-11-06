@@ -1,0 +1,8 @@
+.feature__list {
+  list-style: none;
+}
+.feature__name {
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: bold;
+}
