@@ -1,31 +1,40 @@
 import React, { Component } from "react";
-import FeatureOption from "../featureoptions/featureoptions";
-import "./feature.css";
+import FeatureOption from "../FeatureOptions/FeatureOptions";
+import "./Feature.css";
+import slugify from "slugify";
 
 export default class Feature extends Component {
   render() {
-    const options = this.props.options.map((item, index) => {
-      const selectedClass =
-        item.name === this.props.selected[this.props.name].name
-          ? "feature__selected"
-          : "";
-      const featureClass = "feature__option " + selectedClass;
+    const features = this.props.features;
+
+    const featureList = Object.keys(features).map((feature, idx) => {
+      const featureHash = feature + "-" + idx;
+
+      const options = features[feature].map((item) => {
+        const itemHash = slugify(JSON.stringify(item));
+        return (
+          <FeatureOption
+            item={item}
+            key={itemHash}
+            itemHash={itemHash}
+            name={item.name}
+            selected={this.props.selected}
+            updateFeature={this.props.updateFeature}
+            featureOption={feature}
+            cost={item.cost}
+          />
+        );
+      });
+
       return (
-        <FeatureOption
-          featureClass={featureClass}
-          key={index}
-          onSelect={this.props.onSelect}
-          item={item}
-          featureName={this.props.name}
-        />
+        <fieldset className="feature" key={featureHash}>
+          <legend className="feature__name">
+            <h3>{feature}</h3>
+          </legend>
+          {options}
+        </fieldset>
       );
     });
-
-    return (
-      <div className="feature" key={this.props.name}>
-        <div className="feature__name">{this.props.name}</div>
-        <ul className="feature__list">{options}</ul>
-      </div>
-    );
+    return featureList;
   }
 }

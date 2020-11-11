@@ -1,24 +1,33 @@
 import React, { Component } from "react";
-import "./featureoptions.css";
+import "./FeatureOptions.css";
+import slugify from "slugify";
+import Currency from "../Currency";
 
-export default class FeatureOption extends Component {
+export default class FeatureOptions extends Component {
   render() {
+    const {
+      itemHash,
+      name,
+      updateFeature,
+      selected,
+      featureOption,
+      cost,
+      item,
+    } = this.props;
     return (
-      <li className="feature__item">
-        <div
-          className={this.props.featureClass}
-          onClick={(e) =>
-            this.props.onSelect(this.props.featureName, this.props.item)
-          }
-        >
-          {this.props.item.name}(
-          {new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: "USD",
-          }).format(this.props.item.cost)}
-          )
-        </div>
-      </li>
+      <div key={itemHash} className="feature__item">
+        <input
+          type="radio"
+          id={slugify(name)}
+          className="feature__option"
+          name={slugify(name)}
+          onChange={() => updateFeature(featureOption, item)}
+          checked={name === selected[featureOption]}
+        />
+        <label htmlFor={slugify(name)} className="feature__label">
+          {name} ({Currency.format(cost)})
+        </label>
+      </div>
     );
   }
 }
